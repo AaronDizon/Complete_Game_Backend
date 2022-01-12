@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         notNull:true
       }
     },
-    passsword: {
+    password: {
       type: DataTypes.STRING, allowNull:false,
       validate: {
         notNull: true

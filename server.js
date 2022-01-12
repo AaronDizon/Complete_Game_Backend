@@ -19,10 +19,10 @@ const models = require('./models')
 const signup = async (req,res)=> {
     try {
 
-        const hashedPassword = bcrypt.hashSync(req.body.password, 10)
+        const hashedPassword = await bcrypt.hash(req.body.password, 10)
 
-        const user = models.user.create({
-            username: req.body.name,
+        const user = await models.user.create({
+            username: req.body.username,
             email: req.body.email,
             password: hashedPassword,
             token: 0
@@ -80,10 +80,13 @@ const verify = async (req, res) => {
         console.log(err)
     }
 }
-app.get('/user/verify')
+app.get('/user/verify', verify)
 
 const userRoutes = require('./routes/userRoutes')
 app.use('/user', userRoutes)
+
+const scoreRoutes = require('./routes/scoreRoutes')
+app.use('/score', userRoutes)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
