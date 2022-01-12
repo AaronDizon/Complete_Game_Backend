@@ -11,12 +11,30 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.user.hasMany(models.score)
+      models.user.belongsToMany(models.skin, {through: 'userskins'})
     }
   };
   user.init({
-    username: DataTypes.STRING,
-    email: DataTypes.STRING,
-    passsword: DataTypes.STRING,
+    username:  {
+      type:DataTypes.STRING, allowNull:false,
+      validate: {
+        notNull:true
+      }
+    },
+    email: {
+      type: DataTypes.STRING, allowNull: false,
+      validate: {
+        isEmail: true,
+        notNull:true
+      }
+    },
+    passsword: {
+      type: DataTypes.STRING, allowNull:false,
+      validate: {
+        notNull: true
+      }
+    },
     tokens: DataTypes.INTEGER
   }, {
     sequelize,
