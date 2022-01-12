@@ -25,14 +25,14 @@ const signup = async (req,res)=> {
             username: req.body.username,
             email: req.body.email,
             password: hashedPassword,
-            token: 0
+            tokens: 10
         })
 
         const encryptedId = jwt.sign({userId: user.id}, process.env.JWT_SECRET)
 
         res.json({message: 'ok', user: encryptedId})
     }catch (err) { 
-        console.log(err)
+        res.json(err)
     }
 }
 
@@ -50,7 +50,7 @@ const login = async (req,res) => {
         if (bcrypt.compareSync(req.body.password, user.password)) {
             const encryptedId= jwt.sign({ userId: user.id}, process.env.JWT_SECRET)
             // res.json({message: 'login successful', user: user})
-            res.json({message: 'login successful', user: encryptedId})
+            res.json({message: 'login successful', user, user: encryptedId})
         }else {
             res.status(401)
             res.json({error: 'login failed'})
@@ -86,7 +86,7 @@ const userRoutes = require('./routes/userRoutes')
 app.use('/user', userRoutes)
 
 const scoreRoutes = require('./routes/scoreRoutes')
-app.use('/score', userRoutes)
+app.use('/score', scoreRoutes)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {

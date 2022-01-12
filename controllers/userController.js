@@ -22,7 +22,7 @@ userController.postScore = async (req, res) => {
             }
         })
         const score = await models.score.create({
-            description: req.body.score,
+            score: req.body.score,
             date: req.body.date
         }) 
 
@@ -41,12 +41,12 @@ userController.editName = async (req, res) => {
             }
         })
 
-        const newName = await user.update({
-            name: req.body
-        })
-        // const update = req.body
-        // const updatedName = await user.update(update)
-        res.json(newName)
+        // const newName = await user.update({
+        //     username: req.body
+        // })
+        const update = req.body
+        const updatedName = await user.update(update)
+        res.json(updatedName)
     } catch (err) {
 
     }
