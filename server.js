@@ -29,13 +29,9 @@ const signup = async (req,res)=> {
         })
 
         const encryptedId = jwt.sign({userId: user.id}, process.env.JWT_SECRET)
-        const userResponse = {
-            id: encryptedId,
-            username: user.username,
-            email: user.email
-        }
+     
 
-        res.json({message: 'ok', userResponse})
+        res.json({message: 'ok', userId:encryptedId})
     }catch (err) { 
         res.json(err)
     }
@@ -55,12 +51,7 @@ const login = async (req,res) => {
         if (bcrypt.compareSync(req.body.password, user.password)) {
             const encryptedId= jwt.sign({ userId: user.id}, process.env.JWT_SECRET)
             // res.json({message: 'login successful', user: user})
-            const userResponse = {
-                id: encryptedId,
-                username: user.username,
-                email: user.email
-
-            }
+    
             res.json({message: 'login successful', userId:encryptedId})
         }else {
             res.status(401)
