@@ -11,4 +11,7 @@ userRoutes.post('/:userId/score', userController.postScore)
 //edit username
 userRoutes.put('/:userId', userController.editName)
 
+//edite tokens
+userRoutes.put(':userId/addtoken', userController.addToken)
+
 module.exports = userRoutes

@@ -3,10 +3,14 @@ const jwt = require('jsonwebtoken')
 const userController = {}
 
 userController.getInfo = async (req, res) => {
+
+    const decryptedId = jwt.verify(req.params.userId, process.env.JWT_SECRET)
+    const decryptedUserId = decryptedId.userId
+
     try {
         const user = await models.user.findOne({
             where: {
-                id: req.params.userId
+                id: decryptedUserId
             },
             include: models.score
         })
@@ -39,10 +43,14 @@ userController.postScore = async (req, res) => {
 } 
 
 userController.editName = async (req, res) => {
+
+    const decryptedId = jwt.verify(req.params.userId, process.env.JWT_SECRET)
+    const decryptedUserId = decryptedId.userId
+
     try {
         const user = await models.user.findOne({
             where: {
-                id: req.params.userId
+                id: decryptedUserId
             }
         })
 
@@ -56,5 +64,22 @@ userController.editName = async (req, res) => {
 
     }
 }
+
+userController.addToken = async (req, res) => {
+    
+    const decryptedId = jwt.verify(req.params.userId, process.env.JWT_SECRET)
+    const decryptedUserId = decryptedId.userId
+
+    try {
+        const user = await models.user.findOne({
+            where: {
+                id: decryptedUserId
+            }
+        })
+
+    } catch (err) {
+        res.json(err)
+    }
+}   
 
 module.exports = userController
