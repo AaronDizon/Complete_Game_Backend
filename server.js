@@ -29,8 +29,13 @@ const signup = async (req,res)=> {
         })
 
         const encryptedId = jwt.sign({userId: user.id}, process.env.JWT_SECRET)
+        const userResponse = {
+            id: encryptedId,
+            username: user.username,
+            email: user.email
+        }
 
-        res.json({message: 'ok', user: encryptedId})
+        res.json({message: 'ok', userResponse})
     }catch (err) { 
         res.json(err)
     }
@@ -50,7 +55,13 @@ const login = async (req,res) => {
         if (bcrypt.compareSync(req.body.password, user.password)) {
             const encryptedId= jwt.sign({ userId: user.id}, process.env.JWT_SECRET)
             // res.json({message: 'login successful', user: user})
-            res.json({message: 'login successful', user, user: encryptedId})
+            const userResponse = {
+                id: encryptedId,
+                username: user.username,
+                email: user.email
+
+            }
+            res.json({message: 'login successful', userId:encryptedId})
         }else {
             res.status(401)
             res.json({error: 'login failed'})
@@ -81,6 +92,16 @@ const verify = async (req, res) => {
     }
 }
 app.get('/user/verify', verify)
+
+const examine = async (req, res) => {
+    try {
+        const decryptedId = jwt.verify(req.params.id, process.env.JWT_SECRET)
+        res.json(decryptedId.userId)
+    } catch (err) {
+        res.json(err)
+    }
+}
+app.get('/user/decrypted/:id', examine)
 
 const userRoutes = require('./routes/userRoutes')
 app.use('/user', userRoutes)

@@ -1,4 +1,5 @@
 const models = require('../models')
+const jwt = require('jsonwebtoken')
 const userController = {}
 
 userController.getInfo = async (req, res) => {
@@ -15,10 +16,14 @@ userController.getInfo = async (req, res) => {
     }
 } 
 userController.postScore = async (req, res) => {
+
+    const decryptedId = jwt.verify(req.params.userId, process.env.JWT_SECRET)
+    const decryptedUserId = decryptedId.userId
+
     try {
         const user = await models.user.findOne({
             where: {
-                id: req.params.userId
+                id: decryptedUserId
             }
         })
         const score = await models.score.create({
