@@ -65,7 +65,7 @@ userController.editName = async (req, res) => {
     }
 }
 
-userController.addToken = async (req, res) => {
+userController.changeToken = async (req, res) => {
     
     const decryptedId = jwt.verify(req.params.userId, process.env.JWT_SECRET)
     const decryptedUserId = decryptedId.userId
@@ -76,7 +76,10 @@ userController.addToken = async (req, res) => {
                 id: decryptedUserId
             }
         })
-
+        user.tokens = (parseInt(user.tokens) + parseInt(req.body.token))
+        const update = (parseInt(user.tokens) + parseInt(req.body))
+        res.json(update)
+        // res.json(req.params)
     } catch (err) {
         res.json(err)
     }
